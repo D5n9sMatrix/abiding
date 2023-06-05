@@ -1,0 +1,70 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,67,69)
+  Resizable = False
+  Arrangement = Arrange.Vertical
+  Spacing = True
+  Margin = True
+  { Label1 Label
+    MoveScaled(2,1,24,3)
+    Text = ("Scripting Project Directory")
+  }
+  { TextBox1 TextBox
+    MoveScaled(3,5,55,4)
+  }
+  { Label2 Label
+    MoveScaled(2,12,25,3)
+    Text = ("Shell Command")
+  }
+  { TextBox2 TextBox
+    MoveScaled(3,16,55,4)
+  }
+  { Label3 Label
+    MoveScaled(2,22,26,3)
+    Text = ("Nibble Library Directory")
+  }
+  { TextBox3 TextBox
+    MoveScaled(3,28,55,4)
+  }
+  { Label4 Label
+    MoveScaled(2,34,24,3)
+    Text = ("Source Code repository")
+  }
+  { TextBox4 TextBox
+    MoveScaled(3,38,55,4)
+  }
+  { Label5 Label
+    MoveScaled(2,43,21,2)
+    Text = ("User Name")
+  }
+  { TextBox5 TextBox
+    MoveScaled(3,46,55,4)
+  }
+  { Label6 Label
+    MoveScaled(2,51,55,3)
+    Text = ("Password")
+  }
+  { TextBox6 TextBox
+    MoveScaled(3,55,55,4)
+    Password = True
+  }
+  { HBox1 HBox
+    MoveScaled(1,61,62,4)
+    Spacing = True
+    { Panel1 Panel
+      MoveScaled(4,0,4,4)
+      Expand = True
+    }
+    { btnOK Button
+      MoveScaled(29,0,16,4)
+      Text = ("OK")
+      Default = True
+    }
+    { btnCured Button
+      MoveScaled(46,0,16,4)
+      Text = ("Cured")
+      Cured = True
+    }
+  }
+}

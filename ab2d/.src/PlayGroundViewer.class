@@ -1,0 +1,169 @@
+' Gambas class file
+
+Private hClient As New HttpClient As "Responses"
+Static Private Examples As New Collection
+Private STable As New String[]
+Public BaseUrl As String
+Public MyParent As FMain = FMain
+Private LastUrl As String = ""
+
+
+Public Sub SetParent(iParent As FMain)
+  
+  MyParent = iParent
+  
+End
+
+Public Sub Form_Open()
+   Dim a, b As Integer
+   BaseUrl = "https://gambas.one/playground/examplesmobile.html"
+   Me.Top = Settings["pgview/Window/Top", Me.Top]
+   Me.Left = Settings["pgview/Window/Left", Me.Left]
+   Me.Height = Settings["pgview/Window/Height", Me.Height]
+   Me.Width = Settings["pgview/Window/Width", Me.Width]
+   a = Settings["pgview/Window/split1", 30]
+   b = Settings["pgview/Window/split2", 70]
+   HSplit1.layout = [a, b]
+   
+   Me.Refresh()
+   
+   If Examples.count > 0 Then 
+   
+      For Each x As String In Examples
+          DExample.Add(Examples.key, Examples.key)
+      Next
+      Me.Refresh()
+      
+      Return
+      
+   Endif
+   
+   hClient.URL = BaseUrl
+   hClient.Get()
+
+End
+Public Sub Form_Close()
+  
+  Settings["pgview/Window/Top"] = Me.Top
+  Settings["pgview/Window/Left"] = Me.Left
+  Settings["pgview/Window/Height"] = Me.Height
+  Settings["pgview/Window/Width"] = Me.Width
+  Settings["pgview/Window/split1"] = HSplit1.layout[0]
+  Settings["pgview/Window/split2"] = HSplit1.layout[1]
+   If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+End
+
+Public Sub Responses_Finished()
+
+   ScrapeTextLines()
+   BuildExample()
+   For Each x As String In Examples
+      DExample.Add(Examples.key, Examples.key)
+   Next
+
+End
+
+
+Public Sub ScrapeTextLines()
+
+For Each g As String In hClient.Lines
+  If RegExp.Match(Left(g, 15), ".*<td.*") Then FindText(g)
+Next
+  
+End
+
+Public Sub FindText(g As String)
+  
+  Dim sBlock As String
+  sBlock = RegExp.Replace(g, "<.*>", "")
+  sBlock = Trim(sBlock)
+  STable.Add(sblock)
+  
+End
+
+Public Sub BuildExample()
+  Dim f1, f2, f3 As String
+  For i As Integer = 0 To STable.max Step 3
+    f1 = STable[i]
+    f2 = STable[i + 1]
+    f3 = RegExp.Replace(STable[i + 2], ".*=", "")
+    If f3 = "" Then Continue
+    Examples.Add(f3, f2)
+  Next
+End
+
+Public Sub DExample_Click()
+' here we will get the actual content maybe!!
+Dim MyUrl As String = "https://api.github.com/gists/" & Examples[DExample.key]
+If MyUrl = LastUrl Then Return
+LastUrl = MyUrl
+
+Dim strJson As String
+Dim jsondb As Variant
+Try strjson = HttpClient.Download(MyUrl)
+If Error Or If strjson = "" Then 
+   Message(("Error Fetching Code"))
+   Return
+Endif
+jsondb = json.Decode(strjson, True)
+ProgEdit.Clear()
+For Each v As JsonCollection In jsondb["files"]
+  Try ProgEdit.insert(v["content"])
+  If Error Then 
+    ProgEdit.insert(Error.text & "\n" & Error.where)
+  Endif
+Next
+'Try ProgEdit.insert(jsondb["files"]["playground.gbs"]["content"])
+End
+
+Public Sub DExample_DblClick()
+  DExample_Click()
+  pgnewfrom_Click()
+End
+
+
+Public Sub pgnewfrom_Click()
+  If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+  
+  MyParent.NewFromPlayView(("'Example By Charlie Ogier") & "\n" & ProgEdit.text)
+
+End
+
+Public Sub pgcopytoedit_Click()
+ If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+  MyParent.ProgramWorkSpace.Clear()
+  MyParent.ProgramWorkSpace.insert("#!/usr/bin/env gbs3\n" & ("'Example By Charlie Ogier") & "\n" & ProgEdit.text)
+
+End
+
+Public Sub pginsert_Click()
+ If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+  MyParent.ProgramWorkSpace.insert(("'Example By Charlie Ogier") & "\n" & ProgEdit.text)
+
+End
+
+Public Sub pgecopy_Click()
+
+  ProgEdit.Copy()
+
+End
+
+
+Public Sub pgselall_Click()
+
+  ProgEdit.SelectAll()
+  
+End
+

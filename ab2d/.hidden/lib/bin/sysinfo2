@@ -1,0 +1,28 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/16/2019 07:00:00
+Use "gb.qt4"
+
+ Dim Mlist, ilist As String
+ 
+Message.title = "System Information"
+Mlist = "Gambas version=" & System.FullVersion & "\n"
+Mlist &= "Home Directory=" & Application.Env["HOME"] & "\n" 
+Mlist &= "Env Vars =" & Application.Env.Count & "\n"
+Mlist &= "Time Zone =" & System.TimeZone & "\n"
+Mlist &= "User Logged in =" & System.User.name & "\n"
+Mlist &= "Host/Domain Name=" & System.Host & "/" & System.Domain & "\n"
+Mlist &= "Comp Architecture=" & System.Architecture & "/" & System.Family & "\n"
+Shell "ip address | grep inet" To ilist
+Mlist &= "Network Info=" & ilist
+Shell "cat /etc/resolv.conf | grep name" To ilist
+Mlist &= "DNS Server=" & ilist & "\n"
+Shell "ip route | grep default" To ilist
+Mlist &= "Gateway =" & ilist & "\n"
+Shell "cat /etc/os-release" To ilist
+Mlist &= "OS Release=" & ilist & "\n"
+Message(Mlist)
+
+
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

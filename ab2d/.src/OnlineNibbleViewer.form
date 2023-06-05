@@ -1,0 +1,42 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,164,121)
+  Expand = True
+  Arrangement = Arrange.Fill
+  AutoResize = True
+  { Menu2 Menu
+    Text = ("File")
+    { FileSample Menu
+      Text = ("New From Sample")
+    }
+  }
+  { Edit Menu
+    Text = ("Edit")
+    { CpyEditor Menu
+      Text = ("Copy To Editor")
+    }
+    { Menu1 Menu
+      Text = ("Insert Into Editor")
+    }
+    { SaveToBin Menu
+      Text = ("Save to  ~/bin and  Make Executable")
+    }
+  }
+  { HSplit1 HSplit
+    MoveScaled(0,0,163,110)
+    Expand = True
+    { DExample ColumnView
+      MoveScaled(3,1,50,108)
+      Font = Font["Noto Mono"]
+    }
+    { ProgEdit TextEditor
+      MoveScaled(54,1,104,108)
+      Font = Font["Monospace,+1"]
+      Expand = True
+      Highlight = "Gambas"
+      ReadOnly = True
+      ShowLineNumber = True
+    }
+  }
+}

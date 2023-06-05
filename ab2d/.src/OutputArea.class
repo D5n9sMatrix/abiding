@@ -1,0 +1,54 @@
+' Gambas class file
+
+Public Proc As Process
+
+Public Sub Writeto(Msg As String)
+
+infopage.Print(Msg)
+  
+End
+
+Public Sub RunIt(TheCommand As String, aEnv As String[]) As Process
+   
+  Proc = infopage.shell(TheCommand, aEnv)
+  Return Proc
+End
+
+
+
+Public Sub Form_Open()
+
+   Me.Top = Settings["result/Window/Top", Me.Top]
+   Me.Left = Settings["result/Window/Left", Me.Left]
+   Me.Height = Settings["result/Window/Height", Me.Height]
+   Me.Width = Settings["result/Window/Width", Me.Width]
+
+End
+
+Public Sub Form_Close()
+
+  Settings["result/Window/Top"] = Me.Top
+  Settings["result/Window/Left"] = Me.Left
+  Settings["result/Window/Height"] = Me.Height
+  Settings["result/Window/Width"] = Me.Width
+
+End
+
+Public Sub Form_DblClick()
+
+  If Not IsNull(proc) Then Signal.Send(proc.id, Signal.SIGKILL)
+
+End
+
+Public Sub oStop_Click()
+
+  Form_DblClick()
+
+End
+
+Public Sub peCopy_Click()
+  Dim MyMain As New FMain
+
+  MyMain.ProgramWorkSpace.Insert(infopage.text)
+  MyMain.Show()
+End

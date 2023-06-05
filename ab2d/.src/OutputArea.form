@@ -1,0 +1,29 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,135,94)
+  Expand = True
+  Text = ("Result Window")
+  Arrangement = Arrange.Fill
+  AutoResize = True
+  { ProcessMgmt Menu
+    Text = ("Process Management")
+    { oStop Menu
+      Text = ("Stop")
+      Shortcut = "F6"
+    }
+  }
+  { Edit Menu
+    Text = ("Edit")
+    { peCopy Menu
+      Text = ("Copy Content")
+    }
+  }
+  { infopage TerminalView
+    MoveScaled(1,1,133,88)
+    Font = Font["Monospace"]
+    Expand = True
+    Limit = 0
+    ShowScrollBar = True
+  }
+}

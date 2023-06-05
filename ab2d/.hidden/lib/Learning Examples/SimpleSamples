@@ -1,0 +1,45 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/18/2019 07:00:00
+'The following use is to allow the message nox to be used to display caught errors
+Use "gb.gui.qt"
+'THis file contains a number of code snippits that can be executed by selecting the text and running the selection
+'you can copy the snippets into the editor and practice coding
+
+' Dim a variable
+Dim A As Integer
+A = 25
+Print A
+
+' an array remember array numbers start at zero
+'Unfortunatly you can not define an embeded array in a simple script
+'ie dim b[25] as string
+'so this is how we have to do it
+
+Dim B As String[] = New String[]
+B.add("This value")
+Print B[0], B[0][0] 
+
+' the last will print first character
+
+'This is how you must do an embedded array. Copy this and paste into new editor page
+'then run it. You must define your own main proc to force it to be allowed
+'this will not work with run selected. Embeded Arrays appear to have to be global
+
+Public a[25] As String
+
+Public Sub Main()
+      a[0] = "Hello World"
+      Print a 
+End
+
+'end of cut here
+
+
+
+
+
+' the following code is added automatically to catch any errors encountered
+' durling the execution of the script
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

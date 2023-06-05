@@ -1,0 +1,23 @@
+' Gambas class file
+
+Public Sub Form_Open()
+  
+  Me.Top = Settings["Window2/Top", Me.Top]
+  Me.Left = Settings["Window2/Left", Me.Left]
+  Me.Height = Settings["Window2Height", Me.Height]
+  Me.Width = Settings["Window2/Width", Me.Width]
+  
+End
+
+Public Sub Form_Close()
+  
+  Settings["Window2/Top"] = Me.Top
+  Settings["Window2/Left"] = Me.Left
+  Settings["Window2/Height"] = Me.Height
+  Settings["Window2/Width"] = Me.Width
+  
+End
+
+Public Sub helpwindow_MouseDown()
+  
+End

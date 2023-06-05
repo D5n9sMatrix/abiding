@@ -1,0 +1,49 @@
+' Gambas module file
+
+Public Sub CheckOut(RepositorySource As String, WorkingDirectory As String)
+  
+  If Not VerifyInfo(RepositorySource, WorkingDirectory) Then Return
+  
+  Exec ["svn", "co", 
+    "\"" & RepositorySource & "\""
+  ] With ["PWD=" & "\"" & WorkingDirectory & "\""]
+  
+End
+
+Public Sub UpdateSource(RepositorySource As String, WorkingDirectory As String)
+  
+  If Not VerifyInfo(RepositorySource, WorkingDirectory) Then Return
+  Exec ["svn", "update",
+    "--USER", FMain.RepositoryUser,
+    "--Password", FMain.RepositoryPassword
+  ] With ["PWD=" & "\"" & WorkingDirectory & "\""]
+  
+End
+
+Public Sub CheckIn(RepositorySource As String, WorkingDirectory As String, LogMessage As String)
+  
+  If Not VerifyInfo(RepositorySource, WorkingDirectory) Then Return
+  Exec ["svn", 
+    "ci",
+    "--USER", FMain.RepositoryUser,
+    "--Password", FMain.RepositoryPassword, 
+    "-m", "\"" & LogMessage & "\""
+  ] With ["PWD=" & "\"" & WorkingDirectory & "\""]
+  
+End
+
+Public Sub VerifyInfo(Rp As String, wd As String) As Boolean
+  
+  If rp = "" Then
+    Message.Info(("No repository provided "))
+    Return False
+  Endif
+  If wd = "" Then
+    Message.Info(("No Working Directory Specified for project"))
+    Return False
+  Endif
+  If Not Exist(wd) Then
+    Message.Info(("The specified Working Directory") & "\n" & wd & "\n" & ("Not Found"))
+  Endif
+  
+End

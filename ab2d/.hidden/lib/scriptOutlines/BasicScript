@@ -1,0 +1,12 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/16/2019 07:00:00
+Use "gb.qt4"  ' required for the message box
+
+
+Print "hello world"
+
+
+' Every thing bellow here ensures correct error reporting on a  bad script
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

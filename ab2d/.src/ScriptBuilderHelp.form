@@ -1,0 +1,13 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,148,99)
+  Expand = True
+  Sticky = True
+  Arrangement = Arrange.Fill
+  { !ScriptBuilderHelpWindow WebView
+    MoveScaled(0,0,146,99)
+    #Public = True
+    Expand = True
+  }
+}

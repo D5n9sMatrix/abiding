@@ -1,0 +1,32 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/19/2019 07:00:00
+Use "gb.gui.qt"
+
+' how to define and use classes in script
+' The following is an example of using classes 
+Dim b As Apples = New Apples
+
+Print " hello"
+
+' Start the class definition
+Class Apples
+
+   Public theMess As String = " hello too"
+
+    Public Sub mess()
+       Print themess
+   ''DEBUG  " this is in a class"
+    End
+    ' add more methods etc here
+End class
+
+'More code after the class def
+b.mess()
+
+' as can be seen you may define classes anywhere in the file between statements etc
+' remeber that you may not Dim anything in the class definistion it must be public or static
+' class definitions are collected and then processed before the regular code in the file
+
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

@@ -1,0 +1,29 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,77,40)
+  Expand = True
+  Resizable = False
+  Arrangement = Arrange.Vertical
+  Spacing = True
+  Margin = True
+  { TextArea1 TextArea
+    MoveScaled(1,3,75,28)
+    Expand = True
+    Wrap = True
+    ScrollBar = Scroll.None
+  }
+  { HBox1 HBox
+    MoveScaled(1,34,75,4)
+    Spacing = True
+    { Panel1 Panel
+      MoveScaled(4,0,4,4)
+      Expand = True
+    }
+    { btnOK Button
+      MoveScaled(45,0,16,4)
+      Text = ("OK")
+      Default = True
+    }
+  }
+}

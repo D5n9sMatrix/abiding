@@ -1,0 +1,24 @@
+0000000000000000000000000000000000000000 c9bf31c67056863d19c1a0205fcc31d834f6f892 briang <brian@westwoodsvcs.com> 1580320537 -0800	commit (initial): First git deposit LOL
+c9bf31c67056863d19c1a0205fcc31d834f6f892 ed5db80a30b0fff3231d3458f485ac8231306522 briang <brian@westwoodsvcs.com> 1580341485 -0800	commit: Updated to fix running without a file name when testing
+ed5db80a30b0fff3231d3458f485ac8231306522 b0493f1090320360bf57c61386751f0589074d71 briang <brian@westwoodsvcs.com> 1580343840 -0800	commit: Updated to fix running without a file name when testing
+b0493f1090320360bf57c61386751f0589074d71 67d7a12e85341a6daf0aa5f72f8e74235d4e2a4d briang <brian@westwoodsvcs.com> 1580412862 -0800	commit: Updated to reflect correct person who created the example scripts
+67d7a12e85341a6daf0aa5f72f8e74235d4e2a4d 403e37ff704d983614751ae67112c8f9bd7eca51 briang <brian@westwoodsvcs.com> 1580413198 -0800	commit: Updated to reflect correct person who created the example scripts
+403e37ff704d983614751ae67112c8f9bd7eca51 26ba2573665029dd172c48e509b1c5a171bc407e briang <brian@westwoodsvcs.com> 1580413807 -0800	commit: Updated to reflect correct person who created the example scripts
+26ba2573665029dd172c48e509b1c5a171bc407e 1629a3ff17beb966bf15a413992a98f66bb31171 briang <brian@westwoodsvcs.com> 1580422715 -0800	commit: Correct wget when the standalone app starts from the menu not from a terminal or gui
+1629a3ff17beb966bf15a413992a98f66bb31171 ff0f13d6f1793220beab0eb63fda4ad4ef3f15ae briang <brian@westwoodsvcs.com> 1580423835 -0800	commit: Correct wget when the standalone app starts from the menu not from a terminal or gui
+ff0f13d6f1793220beab0eb63fda4ad4ef3f15ae 4d6dd1f0910339ebd7a03a99940fdfabd93d9b50 briang <brian@westwoodsvcs.com> 1580424108 -0800	commit: Correct wget when the standalone app starts from the menu not from a terminal or gui
+4d6dd1f0910339ebd7a03a99940fdfabd93d9b50 693bc38f4727aea358dcc68332c5f0d7493d1ea4 briang <brian@westwoodsvcs.com> 1580628511 -0800	commit: Many fixes, tool bar, printing working
+693bc38f4727aea358dcc68332c5f0d7493d1ea4 fe96e0c116ee76a1a28cfa171f01d995a1acf006 briang <brian@westwoodsvcs.com> 1580628773 -0800	commit: Many fixes, tool bar, printing working
+fe96e0c116ee76a1a28cfa171f01d995a1acf006 e08b8044dfb2773dd055c7ac6d48a38a6fff00a8 briang <brian@westwoodsvcs.com> 1588537849 -0700	commit: Script Builder
+e08b8044dfb2773dd055c7ac6d48a38a6fff00a8 1a9d0bdc7c9cb02932636c46d78bb44d77999189 briang <brian@westwoodsvcs.com> 1588548228 -0700	commit: Script Builder
+1a9d0bdc7c9cb02932636c46d78bb44d77999189 aa428b8f6b2b4b3554cb015519c466969fbd806b Brian G <justlostintime@gmail.com> 1590892127 -0700	commit: Script Builder
+aa428b8f6b2b4b3554cb015519c466969fbd806b 85fbc0c31b376e0c0620033f4fb52ef7c59d7922 Brian G <justlostintime@gmail.com> 1594651780 -0700	commit: * New Added command line file open
+85fbc0c31b376e0c0620033f4fb52ef7c59d7922 93603da24c2934ab57e7edca68b6428f159d3b8d Brian G <justlostintime@gmail.com> 1599601041 -0700	commit: * New French Translation
+93603da24c2934ab57e7edca68b6428f159d3b8d c9585328b0f02e2c809bf6cc0cf0c6488f09f237 Brian G <justlostintime@gmail.com> 1606005889 -0800	commit: * New French Translation
+c9585328b0f02e2c809bf6cc0cf0c6488f09f237 394d7c4ddf6b499eee235f55822f0efdc2e9a80d Brian G <justlostintime@gmail.com> 1622651631 -0700	commit: NEW Update to support gambas 3.16
+394d7c4ddf6b499eee235f55822f0efdc2e9a80d 33ef60941fea44a847b85938ab886ddcf643fdcc Brian G <justlostintime@gmail.com> 1622653842 -0700	commit: BUG Store open close dialog state information
+33ef60941fea44a847b85938ab886ddcf643fdcc 09b80e6cc6da97b24fef6ce6f08a73891ac43662 Brian G <justlostintime@gmail.com> 1633207854 -0700	commit: * Updated to not require #!/usr/bin when executing from editor
+09b80e6cc6da97b24fef6ce6f08a73891ac43662 4c4571e317fdfaa599337459d7c661a68626f5b2 Brian G <justlostintime@gmail.com> 1636065322 -0700	commit: * Updated with itialian language, Removed wget and uset httpCliend.Download now
+4c4571e317fdfaa599337459d7c661a68626f5b2 1c401e1474671a3688eb1662a1d9e6a416416dbf Brian G <justlostintime@gmail.com> 1636065463 -0700	commit: * Updated with itialian language, Removed wget and uset httpCliend.Download now
+1c401e1474671a3688eb1662a1d9e6a416416dbf 4f82384ee2591d21330862e4f6d6d7084c375ff9 Brian G <justlostintime@gmail.com> 1636326400 -0800	commit: * update with Japanese and Italian
+4f82384ee2591d21330862e4f6d6d7084c375ff9 67956dc1c143fc0fb0edb9976bb36e450ab25353 Brian G <justlostintime@gmail.com> 1638030784 -0800	commit: * Text corrections

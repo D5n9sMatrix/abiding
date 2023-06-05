@@ -1,0 +1,124 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 07/20/2019 07:00:00
+
+Use "gb.gui", "gb.args"
+
+Public progress As Window 
+Public mytext As TextArea
+Public myTime As Timer 
+Public answer As String
+Public panswer As String
+Public results As Collection 
+Public Cproc As Process
+
+
+Public Sub Main()
+
+Dim msgs, nanswer As String
+Dim i As Integer
+
+
+'Place Code Here
+         progress = New Window As "theWindow"
+         progress.title = " Checking Disk Performance Now"
+         progress.resize(500, 200)
+         
+         mytext = New TextArea(progress) As "mytext"
+        mytext.x = 1
+        mytext.y = 1
+         
+         mytext.text = "Starting Disk Drive Testing"
+         'mytext.background = 100
+         mytext.show()
+        
+         mytext.resize(500, 200)
+         mytext.refresh()
+          
+        progress.refresh()
+        progress.show()
+        progress.refresh()
+        Wait 0.1
+        
+       myTime = New Timer As "TheTime"
+  	myTime.Delay = 1000
+  	myTime.Enabled = True
+  	
+       results = New Collection
+       
+	If ARGS.max = 0 Then Quit 0
+	
+       For i = 1 To args.max
+       	If Left(ARGS[i], 5) = "/dev/" Then 
+              	''Debug "Hi its a device " & args[i]
+              	mytext.text &= "\nTesting device  " & args[i]
+              	mytext.refresh()
+              	progress.refresh()
+              	myTime.start()
+              	Wait 0.1
+                     answer = ""
+			Cproc = Shell "hdparm -tT " & ARGS[i] & " 2>&1" For Read As "ShellData"
+			While Cproc.state = process.running
+				Wait 0.1
+			Wend
+			
+       		myTime.Stop()
+       		
+       		answer = "hd test ->" & answer 
+       		''debug "adding ->", args[i],  answer
+		 	results.add(answer, ARGS[i])
+		
+       	Else
+              	 ''Debug "Hi its a directory" & args[i]
+              	mytext.text &= "\nTesting File  " & args[i]
+              	mytext.refresh()
+              	progress.refresh()
+              	myTime.Start()
+              	Wait 0.1
+                   answer = ""
+       		cproc = Shell "dd if=/dev/zero of=" & ARGS[i] & " bs=1048576 count=2048 2>&1" For Read As "ShellData"
+       	       While cproc.state = process.running
+			  Wait 0.1
+                     Wend
+                     
+                     ''debug "adding ->", args[i],  answer
+       	 	results.add(answer, "Write -> " & ARGS[i])
+       	 	
+                      answer = ""
+              	cproc = Shell "dd  if=" & ARGS[i] & " of=/dev/null bs=1048576 count=2048  2>&1" For Read As "ShellData"
+                      While cproc.state = process.running
+			  Wait 0.1
+                     Wend
+                     
+                     ''debug "adding ->", args[i],  answer
+               	results.add(answer, "Read-> " & ARGS[i])
+                     ''debug "removing file "& args[i]
+               	Shell "rm " & ARGS[i] & " 2>&1" To answer
+                      ''debug "file removed"
+               	results.add(answer, "Removed file -> " & args[i])
+                       myTime.Stop()
+       	Endif
+
+       Next
+ 	For Each nanswer In results
+ 		msgs &= results.key & "<br>" & nanswer & "\n"
+ 	Next
+ 	message.title = "---------------------------------------- Disk Performance test results -----------------------------------------------------------"
+ 	message.info(msgs, "OK")
+ 	progress.close()
+ 	
+Quit 0
+Catch
+message(error.text & "\n" & error.where)
+End
+
+Public Sub TheTime_Timer()
+  '''' ''debug "Entered timer function !"
+   myText.text &= "."
+   progress.refresh()
+End
+
+Public Sub ShellData_read()
+            ''''debug "entered read function"
+            answer &= Read #Last, -2048
+            '''''Debug "answer =>" & answer & " <"
+End

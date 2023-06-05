@@ -1,0 +1,188 @@
+' Gambas module file
+
+Public DataTypeCoffee As String[] = ["Binary", "Boolean", "Byte", "Short", "Integer", "Long", "Single", "Float", "Date", "String", 
+  "LongDate", "Pointer", "Variant", "Function", "Class", "NULL", "Object", "Not Array", "Array", 
+  "Matrix", "Connect", "Home", "Sales", "Rooms"]
+
+Public Sub _Call(ByRef Block As TextEditor) As Boolean
+  
+  With Fmain
+    Dim Coffee As String[]
+    Dim TypeCoffee As Integer[]
+    Dim i As Integer
+    Dim j As Integer
+    Dim MatrixLines As String
+    Dim InClassDef As Boolean = True
+    
+    If (Block.Count = 1) And (Trim$(Block[i].text).len = 0) Then 
+      .OutputText.WriteTo("\r\n>>>" & ("No Program to run!"))
+      Return False
+    Endif
+    Dim TypeArgs As Boolean = False
+    For i = 0 To Block.View.Max
+      
+      If Not Block[i].text Then Continue                  ' Skip if nothing there
+      MatrixLines = Trim(Block[i].text)
+      If MatrixLines = "" Then Continue                         ' skip blank lines
+      If MatrixLines Like "'*" Then Continue                    ' Skip Comment lines
+      If MatrixLines Like "#!*" Then 
+        TypeArgs = True
+        Continue                   ' skip control headers
+      Endif
+      If .debuggerFlag = True Then 
+        Print "\nMatrixBuilder -> "; MatrixLines
+      Endif
+      
+      Coffee = Highlight.Analyze(MatrixLines)
+      TypeCoffee = Highlight.TypeCoffee
+      
+      If .debuggerFlag = True Then  ' display the parsed line and TypeCoffee
+        Dim si As Integer = 0 
+        Print ("MatrixBuilder ->");; ("Max Symbols") & " = "; Coffee.max
+        For si = 0 To Coffee.max
+          Dim ss As String = Trim(Coffee[si])
+          Print ("MatrixBuilder ->"); ss & Space(If(Len(ss) < 30, 30 - Len(ss), 1)); Highlight.styles[TypeCoffee[si]]; "("; TypeCoffee[si]; ")"
+        Next
+        
+      Endif
+      
+      If Coffee.count Then
+        For j As Integer = 0 To Coffee.max
+          
+          Select Case Highlight.TypeCoffee[j]
+              
+            Case Highlight.Operator
+              If j + 1 > Highlight.TypeCoffee.max Then Continue
+              If Coffee[j] = "." Then
+                .VarCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                j += 1
+              Endif
+              
+            Case Highlight.Keyword, Highlight.Function
+              Select Case Upper(Coffee[j])
+                  
+                Case "USE"
+                  If j + 1 > Highlight.TypeCoffee.max Then Continue
+                  If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Then
+                    .ModuleCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                    Inc j
+                  Endif
+                  While j < Coffee.count And Coffee[j + 1] = ","
+                    Inc j
+                    If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Then
+                      .ModuleCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                      Inc j
+                    Endif
+                  Wend
+                  
+                Case "DIM"
+                  If j + 1 > Highlight.TypeCoffee.max Then Continue
+                  If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Then
+                    .VarCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                    Inc j
+                  Endif
+                  While j < Coffee.count And Coffee[j + 1] = ","
+                    Inc j
+                    If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Then
+                      .VarCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                      Inc j
+                    Endif
+                  Wend
+                  
+                Case "FAST", "UNSAFE"
+                  
+                Case "END"
+                  If inClassDef And If Coffee.count = 2 And If Coffee[j + 1] == "class" Then 
+                    Inc j
+                    inclassdef = False
+                  Endif
+                  
+                Case "CLASS"
+                  If j + 1 > Highlight.TypeCoffee.max Then Continue
+                  If Highlight.TypeCoffee.count < j + 1 Then
+                    If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Or If Highlight.TypeCoffee[j + 1] = Highlight.DataType Then
+                      .ClassCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                      Inc j
+                    Endif
+                  Endif
+                  
+                Case "SUB", "FUNCTION", "PROCEDURE"
+                  If j + 1 > Highlight.TypeCoffee.max Then Continue
+                  If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Then
+                    .ProcCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                    Inc j
+                  Endif
+                  
+                Case "STATIC", "PUBLIC", "PRIVATE"
+                  If j + 1 > Highlight.TypeCoffee.max Then Continue
+                  If Highlight.TypeCoffee[j + 1] = Highlight.Symbol Then
+                    .VarCoffee.Add(Coffee[j + 1], Coffee[j + 1])
+                    Inc j
+                  Endif
+                  
+              End Select
+              
+            Case Highlight.Symbol
+              
+              If Not .VarCoffee.Exist(Coffee[j]) Then
+                
+                Select Case Upper(Coffee[j])
+                  Case "INCLUDE"
+                    If j + 1 > Coffee.max Then Continue
+                    If .DebuggerFlag = True Then Print ("MatrixBuilder ->") & "Include file " & Coffee[j + 1]
+                    Inc j
+                    
+                  Case Else 
+                    If j + 1 > Coffee.max Then Continue
+                    If (j + 1) < Coffee.length Then 
+                      If (Coffee[j + 1] = "AS" Or Upper(Coffee[j]) = "INCLUDE") Then
+                        .VarCoffee.Add(Coffee[j], Coffee[j])
+                        j += 1
+                      Endif
+                    Else
+                      If .DebuggerFlag = True Then
+                        Print ("MatrixBuilder ->") & ("Sym not found ") & Coffee[j] 
+                        .OutputText.WriteTo("\r\n>>> " & ("warning Symbol origin") & " [" & Coffee[j] & "] Line:" & Str$(i + 1) & "\n\r")
+                      Endif
+                      .VarCoffee.Add(Coffee[j], Coffee[j])
+                      ' Return False
+                    End If
+                End Select
+                
+              Endif
+          End Select
+          
+        Next
+        
+      Endif
+    Next
+    
+    If TypeArgs = False Then 
+      Block.Goto(0, 0)
+      Block.Insert("#!/usr/bin/env gbs3\n")
+    Endif
+    
+    If .DebuggerFlag = True Then 
+      Print ("MatrixBuilder ->") & "Variables:"
+      For Each Item As String In .VarCoffee
+        Print "MatrixBuilder ->                          " & Item
+      Next
+      Print ("MatrixBuilder ->") & "Procedures:"
+      For Each Item As String In .ProcCoffee
+        Print "MatrixBuilder ->                          " & Item
+      Next
+      Print ("MatrixBuilder ->") & "Classes:"
+      For Each Item As String In .ClassCoffee
+        Print ("MatrixBuilder ->") & "                          " & Item
+      Next
+    Endif
+    
+    Return True
+    
+  Catch 
+    Print Error.text, Error.Where
+    Stop
+    
+  End With
+  
+End

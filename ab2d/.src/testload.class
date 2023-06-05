@@ -1,0 +1,3 @@
+' Gambas class file
+
+Public green As String = "green"

@@ -1,0 +1,36 @@
+# depslib dependency file v1.0
+1641917777 source:/home/denis/GambasProjects/abiding/matrix/cpi/abiding/wx_pch.h
+	<stdio.h>
+	<wx/wx.h>
+
+1641918118 source:/home/denis/GambasProjects/abiding/matrix/cpi/abiding/abidingMain.cpp
+	"wx_pch.h"
+	"abidingMain.h"
+
+1641917777 /home/denis/GambasProjects/abiding/matrix/cpi/abiding/wx_pch.h
+	<stdio.h>
+	<wx/wx.h>
+
+1641918060 /home/denis/GambasProjects/abiding/matrix/cpi/abiding/abidingMain.h
+	"abidingApp.h"
+	"GUIDialog.h"
+
+1641917964 /home/denis/GambasProjects/abiding/matrix/cpi/abiding/abidingApp.h
+	<stdio.h>
+
+1641918006 /home/denis/GambasProjects/abiding/matrix/cpi/abiding/GUIDialog.h
+	<wx_pch.h>
+	<stdio.h>
+	<stdio.h>
+	<stdlib.h>
+
+1641918183 source:/home/denis/GambasProjects/abiding/matrix/cpi/abiding/GUIDialog.cpp
+	<stdio.h>
+	<wx/wx.h>
+	"GUIDialog.h"
+
+1641918217 source:/home/denis/GambasProjects/abiding/matrix/cpi/abiding/abidingApp.cpp
+	"wx_pch.h"
+	"abidingApp.h"
+	"abidingMain.h"
+

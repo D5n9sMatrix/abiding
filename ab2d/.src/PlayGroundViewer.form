@@ -1,0 +1,43 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,162,112)
+  Text = ("Examples From PlayGround - By Charlie Ogier")
+  Arrangement = Arrange.Fill
+  AutoResize = True
+  { pgfile Menu
+    Text = ("File")
+    { pgnewfrom Menu
+      Text = ("New From Example")
+    }
+    { pgcopytoedit Menu
+      Text = ("Copy To Editor")
+    }
+    { pginsert Menu
+      Text = ("Insert To Editor")
+    }
+  }
+  { pgEdit Menu
+    Text = ("Edit")
+    { pgecopy Menu
+      Text = ("Copy")
+    }
+    { pgselall Menu
+      Text = ("Select All")
+    }
+  }
+  { HSplit1 HSplit
+    MoveScaled(1,1,160,110)
+    Expand = True
+    { DExample ColumnView
+      MoveScaled(3,1,50,108)
+    }
+    { ProgEdit TextEditor
+      MoveScaled(54,1,104,108)
+      Font = Font["Monospace,+1"]
+      Highlight = "Gambas"
+      ReadOnly = True
+      ShowLineNumber = True
+    }
+  }
+}

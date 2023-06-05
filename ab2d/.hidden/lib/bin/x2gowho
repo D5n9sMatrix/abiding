@@ -1,0 +1,29 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/30/2019 07:00:00
+Use "gb.gui.qt"
+
+Dim idline As String 
+Dim result As String
+Dim resultlines As String[]
+Dim sessioninfo As String[]
+
+Shell "who" To result
+Print result
+
+Shell "x2golistsessions" To result
+
+resultlines = Split(result, "\n")
+
+For Each idline In resultlines
+
+sessioninfo = Split(idline, "|")
+
+If sessioninfo.Length > 10 Then
+  Print sessioninfo[11], sessioninfo[10], "From [" & sessioninfo[7] & "]"
+Endif
+ 
+Next
+
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

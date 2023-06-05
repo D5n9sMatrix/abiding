@@ -1,0 +1,6 @@
+' Gambas class file
+
+Public VarType As String
+Public Scope As String
+Public Name As String
+Public LastValue As Variant

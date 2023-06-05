@@ -1,0 +1,84 @@
+#!/usr/bin/gbs3
+''DEBUG "Color version of other Begins and debug is on"
+Dim i, FNoDot As Integer
+Dim arg As String
+Dim Ftype, fullpath, Fcolor, Fsize, Ftag, Ffullpath As String
+Dim Fdircontent, Fdolist As String[]
+Dim info As STAT
+Dim cwd As String
+
+i = 0
+cwd = Application.Env["PWD"]
+
+If ARGS.count = 1 Then
+	''DEBUG file.name(ARGS[0])
+	If file.name(ARGS[0]) = "mdir" Then 
+  		Fdolist = Dir(cwd, "*").sort()
+		FNoDot = True
+	Else
+		Fdolist = Dir(cwd).sort()
+		FNoDot = False
+	Endif
+Else
+	Fdolist = ARGS.all
+Endif
+
+''DEBUG Fdolist.length
+
+For Each arg In Fdolist
+
+    If i = 0 And If ARGS.count > 1 Then
+	Inc i 
+	Continue
+     Else If FNoDot And If Left$(arg, 1) = "." Then
+	'Inc i
+	Continue
+     Endif
+ 
+    If File.Dir(arg) = "" Then fullpath = Application.Env["PWD"] & "/" Else fullpath = ""
+    fullpath = fullpath & arg
+    With Stat(fullpath, False)
+	Select Case .type
+		Case gb.file
+			Ftype = "File     "
+			Fcolor = "\e[32;1;4m"
+			If .size > (10 * 1024) Then
+				Fsize = (.size / 1024)
+				Ftag = "KB"
+			Else 
+       	        		Fsize = .size
+				Ftag = "Bytes"
+			End If
+
+		Case gb.directory
+			Ftype = "Directory"
+			Fcolor = "\e[31;1;4m"
+                	Try Fdircontent = Dir(fullpath)
+			If Error Then Print " File: (" & fullpath & ") not found"
+                	Fsize = Fdircontent.length
+			Ftag = "Entries"
+
+		Case gb.Device
+			Ftype = "Device   "
+		Case gb.pipe
+			Ftype = "Pipe     "
+		Case gb.socket
+			Ftype = "Socket   "
+		Case gb.Link
+			Ftype = "Link     "
+			Ftag = "--->" & .link
+		Default
+			Ftype = "Unkown    "
+		End Select
+
+    	Ffullpath = Left$(fullpath & "                                                                          ", 80)
+    	
+    	Print i & Fcolor & ")\t(" & Left$(arg & "                              ", 30) & ")\t[" & Ftype & "]\t[" & Format$(Fsize, "##########") & "] " & Ftag & "\e[0m"
+
+    End With
+
+    Inc i
+Next
+
+Catch
+	Print "Thefile :(" & fullpath & ") not found"

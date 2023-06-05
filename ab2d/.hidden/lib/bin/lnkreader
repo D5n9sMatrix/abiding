@@ -1,0 +1,145 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 05/03/2019 07:00:00
+' This script will access a windows .lnk file and try to do the correct thing based on ext
+' on linux
+
+Use "gb.gui.qt"
+' Gambas module file
+
+ Public outwrite As String
+ Public FileName As String
+ Public mFile As File 
+ 
+ 
+ 
+
+Public Sub Main()
+
+Dim sPointer, sDirectory As String
+
+For Each sI As String In Args
+     outwrite &= sI & "\n"
+Next
+
+  If Args.count = 2 Then
+     FileName = Args[1]
+     mFile = Open FileName For Read
+     Seek #mFile, &h7c
+     readBin(mfile, ByRef sPointer)   ' first get the server path.
+     ''Debug sPointer
+     If sPointer = "" Then 
+        Message.Info("Not A known directory type")
+        Quit 1
+     Endif
+     sDirectory &= "/"
+     readBin(mfile, ByRef sDirectory)   ' get folder sub path if any from share
+     If sDirectory <> "/" Then 
+        sPointer &= sDirectory
+     Endif
+     outwrite = UCase(File.Ext(sPointer))
+  Else
+    Quit 1
+  Endif
+  
+  Select Case outwrite
+    Case "PDF"
+      	sPointer = getCorrectedPath(sPointer)
+  	''Debug sPointer
+       If Exist(sPointer) = False Then
+    		Message.Error("File:" & sPointer & "\n Not Found. Link Invalid")
+    		Quit 1
+  	Endif
+      	Shell "/usr/bin/okular \"" & sPointer & "\"" To outwrite
+    Case "DOC", "DOCX", "RTF"
+      	sPointer = getCorrectedPath(sPointer)
+  	''Debug sPointer
+  	If Exist(sPointer) = False Then
+    		Message.Error("File:" & sPointer & "\n Not Found. Link Invalid")
+    		Quit 1
+  	Endif
+      	Shell "/usr/bin/llibreoffice --writer \"" & sPointer & "\"" To outwrite
+    Case "XLS", "XLSX"
+      	sPointer = getCorrectedPath(sPointer)
+  	''Debug sPointer
+  	If Exist(sPointer) = False Then
+    		Message.Error("File:" & sPointer & "\n Not Found. Link Invalid")
+    		Quit 1
+  	Endif
+      	Shell "/usr/bin/libreoffice --calc \"" & sPointer & "\"" To outwrite
+    Case Else
+      Shell "/usr/bin/dolphin \"" & sPointer & "\"" To outwrite
+  End Select
+  
+    ''DEBUG outwrite
+
+End
+Public Sub getCorrectedPath(oldPath As String) As String
+Dim sDirectory, sFilename As String
+Dim sPath As String[]
+Dim pDirectory As String[]
+Dim sIndex As Integer = 0
+  
+  pDirectory = Split(File.Dir(oldPath), "/")
+  For Each bb As String In pDirectory
+    ''DEBUG bb
+  Next
+  sDirectory &= "/"
+  For Each cc As String In pDirectory
+    If cc = "" Then Continue
+    sDirectory &= findMatch(sDirectory, cc) & "/" 
+  Next
+  
+ SFilename = findMatch(sDirectory, File.Name(oldPath))
+  If sFilename = "" Then
+    sFilename = File.Name(oldPath)
+  Endif
+  
+  sDirectory &= sFilename
+  
+  ''DEBUG "New Path is - " & sDirectory
+  
+  Return sDirectory
+  
+End
+
+
+Public Sub findMatch(sRoot As String, sToMatch As String) As String
+ 
+ For Each dEntry As String In Dir(sRoot)
+   
+   ''DEBUG "Compare \'" & dEntry & "\' to \'" & sToMatch & "\'"
+   
+   If UCase(sToMatch) = UCase(dEntry) Then 
+    
+    ''DEBUG "Found - " & dEntry & " from - " & sToMatch 
+    Return dEntry
+   Endif
+ Next
+  
+ Catch
+     Message.Error("Unable to find the lnk sorry")
+     Quit 0
+  
+End
+
+
+ Public Sub readBin(fStream As File, ByRef buff As String) As String
+ Dim iByte As Byte
+      While Not Eof(fStream)
+        Read #fStream, iByte
+         'Debug iByte, buff
+        If iByte = 0 Then Break
+        If Chr$(iByte) = "\\" Then
+          buff &= "/"
+        Else
+          buff &= Chr$(iByte)
+        Endif
+      Wend
+Return buff
+ End
+
+'Place Code Here
+
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

@@ -1,0 +1,9 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/17/2019 07:00:00
+Use "gb.gui.qt"
+
+'place code here
+
+Quit 0
+Catch
+message(error.text & "\n" & error.where)

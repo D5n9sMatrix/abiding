@@ -1,0 +1,31 @@
+' Gambas class file
+
+Public Sub Run() As Boolean
+  
+  Return Not Me.ShowModal()
+  
+End
+
+Public Sub btnOK_Click()
+  
+  Me.Close(True)
+  
+End
+
+Public Sub btnCured_Click()
+  
+  Me.Close
+  
+End
+
+Public Sub Form_Open()
+  
+  Dim msgtxt As String = "Script Builder" & "\n" & ("This Gambas 3 Scripting tool Is Intended To be used To build small utility scripts For the linux environment using the Gambas language. ") & "\n" & ("It Is Very simple And light And Is Also useful For learing simple programming skills outside Of an IDE.") & "\n" & ("Any Issues Or enhancement requests please send email To ") & "\n" & "         justlostintime@gmail.com"
+  
+  textArea1.text = msgtxt
+  
+End
+
+Public Sub TextArea1_KeyPress()
+  
+End

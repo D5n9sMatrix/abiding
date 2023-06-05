@@ -1,0 +1,121 @@
+' Gambas class file
+
+Private MyParent As FMAIN = FMain
+Public NibbleLibraryLocation As String
+
+Public Sub SetParent(iparent As Fmain)
+  
+  MyParent = iparent
+  
+End
+
+Public Sub Form_Open()
+  
+  If Not Exist(NibbleLibraryLocation) Then 
+    Shell "mkdir -p " & NibbleLibraryLocation
+  Endif
+  
+  NibbleLibList.root = NibbleLibraryLocation
+  
+  Me.Top = Settings["nibble/Window/Top", Me.Top]
+  Me.Left = Settings["nibble/Window/Left", Me.Left]
+  Me.Height = Settings["nibble/Window/Height", Me.Height]
+  Me.Width = Settings["nibble/Window/Width", Me.Width]
+  
+End
+
+Public Sub Form_Close()
+  
+  Settings["nibble/Window/Top"] = Me.Top
+  Settings["nibble/Window/Left"] = Me.Left
+  Settings["nibble/Window/Height"] = Me.Height
+  Settings["nibble/Window/Width"] = Me.Width
+  
+  NibbleLibraryLocation = NibbleLibList.dir
+  
+  If Not Object.IsValid(MyParent) Then 
+    MyParent = New FMain
+    MyParent.Show()
+  Else 
+    MyParent.Show()
+  Endif
+  
+End
+
+Public Sub NibbleLibList_Activate()
+  
+  NibbleSource.Load(NibbleLibList.SelectedPath)
+  
+End
+
+Public Sub CopyMenu_Click()
+  
+  NibbleSource.Copy()
+  
+End
+
+Public Sub RunSelected_Click()
+  
+  Dim ExecSource As TextEditor = New TextEditor(Me)
+  
+  If Not NibbleSource.Selected Then 
+    Message(("Nothing Selected"))
+    Return
+  Endif
+  
+  NibbleSource.Copy()
+  ExecSource.Paste()
+  
+  MyParent.ExecuteScript(("Nibble bit") & File.Name(NibbleLibList.SelectedPath), ExecSource, False, False)
+  
+End
+
+Public Sub RunEditSelected_Click()
+  
+  RunSelected_Click()
+  
+End
+
+Public Sub GoMenu_Click()
+  
+  Dim Tfilename As String = Temp("script")
+
+  If Not Object.IsValid(MyParent) Then 
+    MyParent = New FMain
+    MyParent.Show()
+  Endif
+  MyParent.ExecuteScript(Tfilename, NibbleSource, True, False)
+  
+End
+
+Public Sub InsertToEditor_Click()
+  
+  If Not Object.IsValid(MyParent) Then 
+    MyParent = New FMain
+    MyParent.Show()
+  Endif
+  MyParent.ProgramWorkSpace.Insert(nibblesource.text)
+  
+End
+
+Public Sub InsertSelected_Click()
+  
+  NibbleSource.Copy()
+  If Not Object.IsValid(MyParent) Then 
+    MyParent = New FMain
+    MyParent.Show()
+  Endif
+  MyParent.ProgramWorkSpace.Paste()
+  
+End
+
+Public Sub UseThisFile_Click()
+  
+  If Not Object.IsValid(MyParent) Then 
+    MyParent = New FMain
+    MyParent.Show()
+  Endif
+  MyParent.ProgramWorkSpace.Clear()
+  MyParent.ProgramWorkSpace.Insert(nibblesource.text)
+  
+End

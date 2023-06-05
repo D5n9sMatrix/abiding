@@ -1,0 +1,103 @@
+#!/usr/bin/gbs3
+
+Dim FNoDot As Boolean = True
+Dim i, j As Integer = 0
+Dim arg As String
+Dim Ftype, fullpath, Fcolor, Fsize, Ftag, Ffullpath As String
+Dim Fdircontent As String[]
+Dim Fdolist As Variant
+Dim info As STAT
+Dim cwd As String
+
+''Debug "hello"
+
+cwd = Application.Env["PWD"]
+
+If ARGS.count = 1 Then
+	'Print file.name(ARGS[0])
+	If file.name(ARGS[0]) = "ldir" Then 
+		FNoDot = True
+	Else 				' we are called ldir or any other linked name
+		FNoDot = False
+	Endif
+	 Fdolist = Dir(cwd, "*").sort()
+Else 		' else regardless of name just do the items listed dot or no dot
+       Fdolist = New String[]
+	For Each arg In ARGS 
+	      If j > 0 Then Fdolist.add(arg)
+             Inc j
+       Next
+Endif
+
+''DEBUG FNoDot
+''DEBUG Fdolist.length
+
+''DEBUG FdoList[0]
+Inc i
+For Each arg In Fdolist
+
+    ''DEBUG "doing file", arg
+    If Left$(arg, 1) = "." Then
+      ''DEBUG "see dot run"
+      If FNodot = True Then
+                         ''DEBUG "continue"
+			    Continue ' dont print doted hidden items
+      Endif
+      
+    Endif
+ 
+    If File.Dir(arg) = "" Then 
+        fullpath = Application.Env["PWD"] & "/" 
+    Else 
+       fullpath = ""
+    Endif 
+    
+    fullpath = fullpath & arg
+    
+    With Stat(fullpath, False)
+    
+	Select Case .type
+		Case gb.file
+			Ftype = "File     "
+			'Fcolor = "\e[32;1;4m"
+			If .size > (10 * 1024) Then
+				Fsize = (.size / 1024)
+				Ftag = "KB"
+			Else 
+       	Fsize = .size
+				Ftag = "Bytes"
+			End If
+
+		Case gb.directory
+			Ftype = "Directory"
+			'Fcolor = "\e[31;1;4m"
+      Try Fdircontent = Dir(fullpath)
+			If Error Then Print " File: (" & fullpath & ") not found"
+      Fsize = Fdircontent.length
+			Ftag = "Entries"
+
+		Case gb.Device
+			Ftype = "Device   "
+		Case gb.pipe
+			Ftype = "Pipe     "
+		Case gb.socket
+			Ftype = "Socket   "
+		Case gb.Link
+			Ftype = "Link     "
+			Ftag = "--->" & .link
+		Default
+			Ftype = "Unkown    "
+		End Select
+
+    	Ffullpath = Left$(fullpath & "                                                                          ", 80)
+    	
+    	Print i & Fcolor & "\t" & Left$(arg & "                              ", 30) & "\t" & Ftype & "\t" & Format$(Fsize, "#########0") & " " & Ftag ' & "\e[0m"
+
+    End With
+
+    Inc i
+    
+Next
+
+Catch
+	Print "Thefile :(" & fullpath & ") not found with error\n " & Error.Text & "\n" & error.where

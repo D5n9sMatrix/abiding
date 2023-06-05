@@ -1,0 +1,20 @@
+* Text corrections
+* update with Japanese and Italian
+* Updated with itialian language, Removed wget and uset httpCliend.Download now
+* Updated to not require #!/usr/bin when executing from editor
+* New: Insert #!/usrbin when required
+* New: Prompt when saving if generated file will not be executable
+
+Script Builder
+Simple program to quickly create executable script files
+
+NEW added change to new to allow Graphic and non graphic script
+NEW Added Double click to open Gambas one examples and network nibbles directly
+Many fixes, tool bar, printing working
+Correct wget when the standalone app starts from the menu not from a terminal or gui
+Updated to reflect correct person who created the example scripts
+
+Updated to fix running without a file name when testing
+Added access to gambas one example files
+
+First git deposit LOL

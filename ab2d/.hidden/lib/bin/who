@@ -1,0 +1,33 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/30/2019 07:00:
+
+Dim idline As String 
+Dim result As String
+Dim resultlines As String[]
+Dim sessioninfo As String[]
+
+Print "Active Local Sessions"
+
+Shell "/usr/bin/who -a -H" To result
+'Shell "cat testit2" To result
+Print result
+
+Print "Active x2go sessions"
+
+Shell "x2golistsessions" To result
+
+resultlines = Split(result, "\n")
+
+For Each idline In resultlines
+
+sessioninfo = Split(idline, "|")
+
+If sessioninfo.Length > 10 Then
+  Print sessioninfo[11], sessioninfo[10], "From [" & sessioninfo[7] & "]"
+Endif
+ 
+Next
+
+Quit 0
+Catch
+Print error.text & "\n" & error.where

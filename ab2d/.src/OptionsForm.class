@@ -1,0 +1,96 @@
+' Gambas class file
+
+'Static WorkPlaceChanged As Boolean = False
+
+
+Public Sub Run() As Boolean
+
+  Return Not Me.ShowModal()
+
+End
+
+Public Sub btnOK_Click()
+
+  Me.Close(True)
+
+End
+
+Public Sub btnCured_Click()
+
+  Me.Close
+
+End
+
+
+Public Sub Form_Open()
+
+  LoadOptions()
+  
+  TextBox1.text = FMain.SourceDirectory
+  TextBox2.text = FMain.ShellCommandProcessor
+  TextBox3.text = NibbleBrowser.NibbleLibraryLocation
+  TextBox4.text = FMain.CodeRepository
+  
+   Me.Top = Settings["option/Window/Top", Me.Top]
+   Me.Left = Settings["option/Window/Left", Me.Left]
+   Me.Height = Settings["option/Window/Height", Me.Height]
+   Me.Width = Settings["option/Window/Width", Me.Width]
+   
+End
+
+Public Sub Form_Close()
+
+  FMain.SourceDirectory = TextBox1.text
+  FMain.ShellCommandProcessor = TextBox2.text
+  NibbleBrowser.NibbleLibraryLocation = TextBox3.Text
+  FMain.CodeRepository = TextBox4.text
+  
+  SaveOptions()
+  
+  Settings["option/Window/Top"] = Me.Top
+  Settings["option/Window/Left"] = Me.Left
+  Settings["option/Window/Height"] = Me.Height
+  Settings["option/Window/Width"] = Me.Width
+  
+End
+
+Public Sub SaveOptions()
+  Dim x As Settings 
+  
+  System.shell = FMain.ShellCommandProcessor
+  
+  Settings["options/SourceDir"] = FMain.SourceDirectory
+  Settings["options/Shell"] = FMain.ShellCommandProcessor
+  Settings["nibble/library"] = NibbleBrowser.NibbleLibraryLocation
+  Settings["options/RepositoryDir"] = FMain.CodeRepository
+  
+  ' add check for Source Dir copy of Repository directory
+  x = New Settings("." & FMain.SourceDirectory, "Repository for project")
+  x["options/RepositoryDir"] = FMain.CodeRepository
+  
+End
+
+Public Sub LoadOptions()
+  Dim userroot As String
+  Dim x As Settings 
+  
+  userroot = User.home
+  
+  FMain.SourceDirectory = Settings["options/SourceDir", userroot & "/bin"]
+  FMain.ShellCommandProcessor = Settings["options/Shell", "/bin/bash"]
+  NibbleBrowser.NibbleLibraryLocation = Settings["nibble/library", userroot & "/lib"]
+  FMain.CodeRepository = Settings["options/RepositoryDir", FMain.CodeRepository] 
+  
+  x = New Settings("." & FMain.SourceDirectory, "Repository for project")
+  FMain.CodeRepository = x["options/RepositoryDir", FMain.CodeRepository] 
+  
+  If Exist(FMain.ShellCommandProcessor) Then     
+    System.shell = FMain.ShellCommandProcessor
+  Else
+    Message("The System shell selected (" & FMain.ShellCommandProcessor & ") not found , Defaulting to /bin/bash")
+    System.shell = "/bin/bash"  ' incase not installed use system wide default
+    'FMain.ShellCommandProcessor = "/bin/bash"
+   
+  Endif
+   
+End

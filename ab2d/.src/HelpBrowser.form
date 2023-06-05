@@ -1,0 +1,17 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,154,113)
+  Visible = False
+  Expand = True
+  Text = ("Script Builder Help")
+  Persistent = True
+  Arrangement = Arrange.Fill
+  AutoResize = True
+  { !helpwindow WebView
+    MoveScaled(1,1,150,111)
+    #Public = True
+    Expand = True
+    Url = "http://gambaswiki.org/wiki"
+  }
+}

@@ -1,0 +1,65 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,107,81)
+  Expand = True
+  Text = ("Nibble library browser")
+  Arrangement = Arrange.Horizontal
+  { EditMenu Menu
+    Text = ("Edit")
+    { CopyMenu Menu
+      Text = ("Copy")
+    }
+    { RunEditSelected Menu
+      Text = ("Run Selected")
+    }
+  }
+  { Runeitmenue Menu
+    Text = ("Execute")
+    { GoMenu Menu
+      Text = ("Go->")
+    }
+    { RunSelected Menu
+      Text = ("Run Selected")
+    }
+  }
+  { Use Menu
+    Text = ("Use Nibble")
+    { UseThisFile Menu
+      Text = ("Use This File")
+    }
+    { InsertToEditor Menu
+      Text = ("Insert To Editor")
+    }
+    { InsertSelected Menu
+      Text = ("Insert Selected To Editor")
+    }
+  }
+  { !NibbleLibList FileChooser
+    MoveScaled(1,1,56,70)
+    #Public = True
+    ToolTip = ("Select the file to be Included")
+    Expand = True
+    ShowDetailed = True
+    ReadOnly = True
+  }
+  { !NibbleSource TextEditor
+    MoveScaled(59,1,47,70)
+    #Public = True
+    Font = Font["Monospace,+1"]
+    Expand = True
+    PopupMenu = "EditMenu"
+    Mode = "Gambas"
+    ReadOnly = True
+    TabIndent = True
+    ShowPosition = True
+    ShowCurrent = True
+    ShowLineNumber = True
+    ShowModified = True
+    ShowBraces = True
+    ShowExpand = True
+    ShowIndent = True
+    CloseBraces = True
+    CloseStrings = True
+  }
+}

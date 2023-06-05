@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon=/usr/share/icons/crystal/48x48/apps/yast-firstboot.png
+Icon[en_US]=/usr/share/icons/crystal/48x48/apps/yast-firstboot.png
+Exec=/home/brian/bin/xdg-su -c "/home/brian/bin/who_gui"
+Name[en_US]=Who
+Name=Who

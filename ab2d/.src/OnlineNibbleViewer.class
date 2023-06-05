@@ -1,0 +1,153 @@
+' Gambas class file
+
+
+Public BaseUrl As String
+Public MyParent As Fmain = Fmain
+Private LastUrl As String = ""
+Static Private sExamples As New Collection
+
+Public Sub SetParent(iParent As Fmain)
+  
+  MyParent = iParent
+  
+End
+
+
+Public Sub Form_Open()
+   Dim a, b As Integer
+   
+   BaseUrl = "https://api.github.com/gists/01d2a55a949dc8de1a374d1942cbd445"
+   
+   Me.Top = Settings["nbview/Window/Top", Me.Top]
+   Me.Left = Settings["nbview/Window/Left", Me.Left]
+   Me.Height = Settings["nbview/Window/Height", Me.Height]
+   Me.Width = Settings["nbview/Window/Width", Me.Width]
+   a = Settings["nbview/Window/split1", 30]
+   b = Settings["nbview/Window/split2", 70]
+   HSplit1.layout = [a, b]
+   
+   Me.Refresh()
+   
+   If sExamples.count > 0 Then 
+   
+      For Each x As String In sExamples
+          DExample.Add(sExamples.key, sExamples.key)
+      Next
+      Me.Refresh()
+      
+      Return
+      
+   Endif
+   
+   Dim strJson As String
+   Dim jsondb As Variant
+   
+   ' Dim cmd As String = "wget -q -o /dev/null -O - '" & BaseUrl & "'" 
+   ' Shell cmd To strJson
+   Try strJson = HttpClient.Download(BaseUrl)
+   If Error Or If strjson = "" Then 
+       Message(("Error fetching list of examples"))
+       Return
+   Endif
+   jsondb = json.Decode(strjson, True)
+   
+   For Each s As String In Split(jsondb["files"]["GistList"]["content"], "\n")
+     Dim sList As String[] = Split(s, ":")
+     sExamples.Add(sList[2], sList[0] & Space(If(Len(sList[0]) < 15, 15 - Len(sList[0]), 1)) & "-" & sList[1])
+   Next
+   
+   For Each x As String In sExamples
+          DExample.Add(sExamples.key, sExamples.key)
+   Next
+   
+   Me.Refresh()
+   
+End
+
+Public Sub Form_Close()
+  
+  Settings["nbview/Window/Top"] = Me.Top
+  Settings["nbview/Window/Left"] = Me.Left
+  Settings["nbview/Window/Height"] = Me.Height
+  Settings["nbview/Window/Width"] = Me.Width
+  Settings["nbview/Window/split1"] = HSplit1.layout[0]
+  Settings["nbview/Window/split2"] = HSplit1.layout[1]
+   If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+End
+
+
+Public Sub DExample_Click()
+' here we will get the actual content maybe!!
+Dim MyUrl As String = "https://api.github.com/gists/" & sExamples[DExample.key]
+If LastUrl = MyUrl Then Return
+LastUrl = MyUrl
+Dim strJson As String
+Dim jsondb As Variant
+' 
+' Dim cmd As String = "wget -q -o /dev/null -O - '" & MyUrl & "'" 
+' Shell cmd To strJson
+
+Try strjson = HttpClient.Download(MyUrl)
+If Error Or If strjson = "" Then 
+    Message(("Error Fetching Nibble code example"))
+    Return
+Endif
+jsondb = json.Decode(strjson, True)
+ProgEdit.Clear()
+For Each v As JsonCollection In jsondb["files"]
+  Try ProgEdit.insert(v["content"])
+  If Error Then 
+    ProgEdit.insert(Error.text & "\n" & Error.where)
+  Endif
+Next
+End
+
+Public Sub CpyEditor_Click()
+ If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+  MyParent.ProgramWorkSpace.text = ProgEdit.text
+
+End
+
+Public Sub SaveToBin_Click()
+
+  Dim iPath As String = User.home & "/bin/" & DExample.text
+  
+  If Not Exist(User.home & "/bin") Then
+    Mkdir User.home & "/bin"
+  Endif
+  
+  ProgEdit.Save(User.home & "/bin/" & DExample.text)
+  
+  Chmod iPath To "rwxr-xr-x"
+  
+
+End
+
+Public Sub Menu1_Click()
+   If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+  MyParent.ProgramWorkSpace.Insert(ProgEdit.text)
+
+End
+
+Public Sub File_Click()
+   If Not Object.IsValid(MyParent) Then 
+      MyParent = New FMain
+      MyParent.Show()
+      Endif
+  MyParent.NewFromPlayView(("'Nibble Example") & "\n" & ProgEdit.text)
+
+End
+
+Public Sub DExample_DblClick()
+  DExample_Click()
+  File_Click()
+End

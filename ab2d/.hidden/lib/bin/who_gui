@@ -1,0 +1,67 @@
+#!/usr/bin/gbs3
+' Gambas Script File Created 04/30/2019 07:00:00
+' this displays the system users who and x2golistsession for all active sessions
+
+Use "gb.gui.qt"
+Use "gb.form"
+
+Dim Window As FORM = New Form
+
+
+
+Dim idline As String 
+Dim result As String
+Dim resultlines As String[]
+Dim sessioninfo As String[]
+Dim InfoMessage As String
+
+Dim TextSpace As TextArea
+
+Window.Arrangement = Arrange.fill
+Window.Width = 500
+Window.height = 300
+Window.x = 30
+Window.y = 30
+Window.Autoresize = True
+
+TextSpace = New TextArea(Window)
+'TextSpace.Background = 0
+TextSpace.foreground = &H0
+
+
+message.title = "Who_gui"
+
+InfoMessage = "Active Local Sessions\n"
+
+Shell "/usr/bin/xdg-su -c \"/usr/bin/who -a -H\"" To result
+
+InfoMessage &= result
+
+InfoMessage &= "Active x2go sessions\n"
+
+Shell "/usr/bin/xdg-su -c \"/usr/sbin/x2golistsessions_root\"" To result
+
+resultlines = Split(result, "\n")
+
+For Each idline In resultlines
+
+sessioninfo = Split(idline, "|")
+
+If sessioninfo.Length > 10 Then
+InfoMessage &= sessioninfo[11] & "\t" & sessioninfo[10] & "\tFrom [" & sessioninfo[7] & "]\n"
+Endif
+ 
+Next
+
+TextSpace.text = InfoMessage
+Window.refresh
+Window.title = "Who With X2go users"
+Window.Activate
+Window.showmodal
+
+'message.info(InfoMessage)
+
+Quit 0
+Catch
+
+Message.error(error.text & "\n" & error.where)
